@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meet in the Middle</title>
+  </head>
+  <body>
+    <!-- Stage 1: landing -->
+    <section id="landing" class="stage stage--active">
+      <div class="card">
+        <h1>Meet in the middle</h1>
+        <p class="subtitle">Find the fair meeting point — where you both drive about the same.</p>
+
+        <div class="field">
+          <label for="inputA">Point A</label>
+          <div class="ac" data-ac="a">
+            <input id="inputA" type="text" autocomplete="off" placeholder="Start typing an address or city…" />
+            <ul class="ac-menu" hidden></ul>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="inputB">Point B</label>
+          <div class="ac" data-ac="b">
+            <input id="inputB" type="text" autocomplete="off" placeholder="Start typing an address or city…" />
+            <ul class="ac-menu" hidden></ul>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="threshold">
+            Fairness tolerance <span id="threshLabel" class="pill">±0%</span>
+          </label>
+          <input id="threshold" type="range" min="0" max="20" step="1" value="0" />
+          <p id="example" class="example"></p>
+        </div>
+
+        <button id="run" class="run" disabled>Find the midpoint</button>
+        <p id="error" class="error" hidden></p>
+      </div>
+      <footer class="credit">Self-hosted · Valhalla + OpenStreetMap</footer>
+    </section>
+
+    <!-- Stage 2: loading -->
+    <section id="loading" class="stage">
+      <div class="loader">
+        <div class="spinner"></div>
+        <p id="loadingText" class="loading-text">Planning routes…</p>
+      </div>
+    </section>
+
+    <!-- Stage 3: map -->
+    <section id="mapStage" class="stage">
+      <div id="map"></div>
+      <aside id="results" class="results"></aside>
+      <button id="restart" class="restart" title="Start over">↺ New search</button>
+    </section>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

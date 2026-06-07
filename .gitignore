@@ -1,0 +1,8 @@
+node_modules/
+data/
+dist/
+.claude/
+*.log
+.env
+.DS_Store
+*.osm.pbf
