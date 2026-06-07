@@ -35,26 +35,32 @@ granularity this tool needs, and keeps it featherweight.
 - Node 20.19+
 - ~50 GB free disk, ~8 GB RAM (a small Linux VM / Proxmox container is ideal)
 
-## Quick start
+## Quick start — Docker (recommended for a server)
+
+Brings up the web app **and** Valhalla together. The geocoder is baked into the app image,
+so no Node install is needed on the host.
 
 ```bash
 git clone https://github.com/cardosocardoso/mapa-meio.git
 cd mapa-meio
-npm install
-
-# 1. Build the geocoder (seconds) and start Valhalla (downloads US map + builds tiles — a while)
-./scripts/setup-data.sh
-docker compose logs -f valhalla     # wait until it's serving
-curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8002/status   # 200 = ready
-
-# 2. Run the app
-npm run dev      # http://localhost:5173
+docker compose up -d --build      # app on http://<host>:8080
+docker compose logs -f valhalla   # first run downloads the US map + builds tiles (a while)
 ```
 
-Check everything is wired up:
+Valhalla is ready when `curl -s localhost:8002/status` returns 200. Until then the app
+loads but search will say routing is unavailable. Check the wiring:
 
 ```bash
-curl -s localhost:3100/api/health     # {"geo":true,"valhalla":true}
+curl -s localhost:8080/api/health   # {"geo":true,"valhalla":true} = ready
+```
+
+## Quick start — local dev (Node)
+
+```bash
+npm install
+./scripts/setup-data.sh    # builds geo.db (seconds) + starts Valhalla (downloads/builds tiles)
+npm run dev                # UI http://localhost:5173 (API on :3100)
+curl -s localhost:3100/api/health
 ```
 
 ## Development

@@ -1,13 +1,26 @@
-# Routing backend. Geocoding (ZIP + city) is handled locally from GeoNames data
-# (scripts/build-geodata.mjs) and needs no container.
+# Full stack: the web app + the Valhalla routing engine.
 #
-#   docker compose up -d
+#   docker compose up -d --build      # open http://<host>:8080
 #
+# Geocoding (ZIP + city) is baked into the app image from GeoNames — no extra service.
 # On first boot Valhalla downloads the US extract (via tile_urls) into ./data/valhalla
 # and builds routing tiles there; later runs reuse them. Needs lots of disk (~30-50 GB)
 # and ~4-8 GB RAM — comfortable on the Proxmox box.
 
 services:
+  app:
+    build: .
+    container_name: mapa-meio-app
+    ports:
+      - "8080:3000"
+    environment:
+      - PORT=3000
+      - VALHALLA_URL=http://valhalla:8002
+    depends_on:
+      - valhalla
+    restart: unless-stopped
+
+
   valhalla:
     # gis-ops "batteries-included" image: downloads the pbf, builds tiles, then serves.
     image: ghcr.io/gis-ops/docker-valhalla/valhalla:latest

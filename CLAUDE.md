@@ -40,20 +40,22 @@ test/                   vitest suite (mocked Valhalla + fixture geo.db)
 - ~4–8 GB RAM for Valhalla to build/serve
 - Node 20.19+
 
-## Setup
+## Setup & run
 
+Two ways:
+
+**Docker (recommended for servers)** — app + Valhalla together; geo.db baked into the image:
+```bash
+docker compose up -d --build      # app on http://<host>:8080
+docker compose logs -f valhalla   # first run downloads US map + builds tiles (a while)
+# ready when: curl -s -o /dev/null -w '%{http_code}' http://localhost:8002/status -> 200
+```
+
+**Local dev (Node):**
 ```bash
 npm install
 ./scripts/setup-data.sh    # builds geo.db (seconds) + starts Valhalla tile build (a while)
-# Valhalla ready when: curl -s -o /dev/null -w '%{http_code}' http://localhost:8002/status  -> 200
-```
-
-## Run
-
-```bash
-npm run dev        # UI -> http://localhost:5173   (API on :3100, proxied)
-# or production:
-npm run build && PORT=8080 npm start
+npm run dev                # UI -> http://localhost:5173 (API on :3100, proxied)
 ```
 
 Dev ports: Vite UI **5173**, API **3100** (the API default is 3000; dev uses 3100 and
